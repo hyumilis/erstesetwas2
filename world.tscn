@@ -1,0 +1,64 @@
+[gd_scene load_steps=9 format=3 uid="uid://cg3tjh0rshae5"]
+
+[ext_resource type="PackedScene" uid="uid://bigjmdst5uro5" path="res://simple_car.blend" id="1_ssviw"]
+[ext_resource type="PackedScene" uid="uid://bm152pjwvicw8" path="res://simple_tree.blend" id="2_3ij6p"]
+[ext_resource type="PackedScene" uid="uid://cupgns64ce32e" path="res://playerrigid.tscn" id="3_ux4g0"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_h7cfm"]
+sky_top_color = Color(0.585465, 0.226862, 0.849068, 1)
+sky_horizon_color = Color(0.696366, 0.598966, 0.745517, 1)
+ground_horizon_color = Color(0.696366, 0.598966, 0.745517, 1)
+
+[sub_resource type="Sky" id="Sky_itbgn"]
+sky_material = SubResource("ProceduralSkyMaterial_h7cfm")
+
+[sub_resource type="Environment" id="Environment_qhjpe"]
+background_mode = 2
+sky = SubResource("Sky_itbgn")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_tn7yc"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_7af20"]
+data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_qhjpe")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(55.02, 0, 0, 0, 55.02, 0, 0, 0, 55.02, 0, 0, 0)
+mesh = SubResource("PlaneMesh_tn7yc")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_7af20")
+
+[node name="simple_car" parent="." instance=ExtResource("1_ssviw")]
+transform = Transform3D(0.829827, 0, -0.55802, 0, 1, 0, 0.55802, 0, 0.829827, -39.2888, 0, -32.7159)
+visible = false
+
+[node name="simple_tree" parent="." instance=ExtResource("2_3ij6p")]
+transform = Transform3D(1.68, 0, 0, 0, 1.68, 0, 0, 0, 1.68, 0, 0, 31.8811)
+
+[node name="simple_tree2" parent="." instance=ExtResource("2_3ij6p")]
+transform = Transform3D(2.155, 0, 0, 0, 2.155, 0, 0, 0, 2.155, 28.1609, 0, 31.8811)
+
+[node name="simple_tree3" parent="." instance=ExtResource("2_3ij6p")]
+transform = Transform3D(1.44, 0, 0, 0, 1.44, 0, 0, 0, 1.44, 28.1609, 0, -16.7327)
+
+[node name="simple_tree4" parent="." instance=ExtResource("2_3ij6p")]
+transform = Transform3D(1.29, 0, 0, 0, 1.29, 0, 0, 0, 1.29, 17.7542, 0, 13.221)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -81.6131, 65.671, 24.2782)
+light_color = Color(0.517228, 0.706709, 0.899197, 1)
+light_energy = 0.354
+light_volumetric_fog_energy = 2.293
+
+[node name="Playerrigid" parent="." instance=ExtResource("3_ux4g0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.680552, 0)
+linear_damp = 3.0

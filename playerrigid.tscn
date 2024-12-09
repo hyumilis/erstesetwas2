@@ -1,0 +1,58 @@
+[gd_scene load_steps=4 format=3 uid="uid://cupgns64ce32e"]
+
+[ext_resource type="PackedScene" uid="uid://cfk4mbft0klp1" path="res://simple_head.blend" id="1_bhhvy"]
+
+[sub_resource type="GDScript" id="GDScript_6aqq6"]
+script/source = "extends RigidBody3D
+
+
+var mouse_sensitivity := 0.001
+var twist_input := 0.0
+var pitch_input := 0.0
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	var input = Vector3.ZERO
+	input.z = Input.get_axis(\"move_left\", \"move_right\")
+	input.x = Input.get_axis(\"move_forward\", \"move_backwards\")
+	apply_central_force(input * 1200.0 * delta)
+	if Input.is_action_just_pressed(\"ui_cancel\"):
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	$Twistpivot.rotate_y(twist_input)
+	$Twistpivot/Pitchpivot.rotate_x(pitch_input)
+	$Twistpivot/Pitchpivot.rotation.x = clamp($Twistpivot/Pitchpivot.rotation.x,-0.5, 0.5)
+	twist_input = 0.0
+	pitch_input = 0.0
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion:
+		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+			twist_input = - event.relative.x * mouse_sensitivity
+			pitch_input = - event.relative.y * mouse_sensitivity
+"
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_y1hb3"]
+
+[node name="Playerrigid" type="RigidBody3D"]
+lock_rotation = true
+script = SubResource("GDScript_6aqq6")
+
+[node name="simple_head" parent="." instance=ExtResource("1_bhhvy")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1.92, 0, 0, 0, 1.92, 0, 0, 0, 1.92, 0, 1.10672, 0)
+shape = SubResource("SphereShape3D_y1hb3")
+
+[node name="Twistpivot" type="Node3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 2.105, 0)
+
+[node name="Pitchpivot" type="Node3D" parent="Twistpivot"]
+transform = Transform3D(1, 0, 0, 0, 0.978148, 0.207912, 0, -0.207912, 0.978148, 0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Twistpivot/Pitchpivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)

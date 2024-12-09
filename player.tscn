@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://dukjd5yom47qt"]
+
+[ext_resource type="Script" path="res://Player.gd" id="1_lesh1"]
+[ext_resource type="PackedScene" uid="uid://cfk4mbft0klp1" path="res://simple_head.blend" id="2_ujvdx"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_hidl5"]
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_lesh1")
+
+[node name="simple_head" parent="." instance=ExtResource("2_ujvdx")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1.975, 0, 0, 0, 1.975, 0, 0, 0, 1.975, 0, 1.07601, 0)
+shape = SubResource("SphereShape3D_hidl5")
